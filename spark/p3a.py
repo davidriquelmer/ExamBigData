@@ -1,0 +1,6 @@
+spark = SparkSession.builder.getOrCreate()
+escuelastemp = spark.read.format("csv").load("/usr/local/spark/escuelasPR.csv")
+studenttemp = spark.read.format("csv").load("/usr/local/spark/studentsPR.csv")
+escuela = escuelastemp.toDF("region","distrito","ciudad","eid","enombre","nivel","college")
+student = studenttemp.toDF("region","distrito","eid","enombre","nivel","sexo","sid")
+escuela.join(student,'eid').filter(escuela.nivel == "Superior").filter(student.sexo == "M").filter((escuela.ciudad == "Ponce") | (escuela.ciudad == "San Juan")).show()
